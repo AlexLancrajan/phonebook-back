@@ -1,0 +1,30 @@
+GET http://localhost:3001/api/persons
+###
+GET http://localhost:3001/api/persons/7
+###
+DELETE http://localhost:3001/api/persons/8
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name":"Pepito",
+    "number": "54-67-234324"
+}
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name":"",
+    "number": "54-67-234324"
+}
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name":"",
+    "number": "54-67-234324"
+}
+
