@@ -2,7 +2,7 @@ GET http://localhost:3001/api/persons
 ###
 GET http://localhost:3001/api/persons/7
 ###
-DELETE http://localhost:3001/api/persons/8
+DELETE http://localhost:3001/api/persons/66bcad2557832f5d2e8d9ff6
 ###
 POST http://localhost:3001/api/persons
 Content-Type: application/json
