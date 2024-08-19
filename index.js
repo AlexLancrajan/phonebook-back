@@ -91,7 +91,6 @@ const unknownEndpoint = (req, res) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, req, res, next) => {
-  console.log(error.message)
 
   if(error.name === 'CastError') {
     return res.status(400).send({error: 'maformatted id'})
