@@ -38,10 +38,6 @@ app.get('/api/persons/:id', (req, res, next) => {
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
 
-  if (body.name === "" || body.number === "") {
-    return res.status(400).json({error: 'content missing'})
-  }
-
   const contact = new Contact({
     name: body.name,
     number: body.number
@@ -62,7 +58,7 @@ app.put('/api/persons/:id',(req, res, next) => {
     number: body.number,
   }
 
-  Contact.findByIdAndUpdate(req.params.id, contact, {new: true})
+  Contact.findByIdAndUpdate(req.params.id, contact, {new: true, runValidators: true})
     .then(updatedContact => {
       res.json(updatedContact)
     })
@@ -99,6 +95,9 @@ const errorHandler = (error, req, res, next) => {
 
   if(error.name === 'CastError') {
     return res.status(400).send({error: 'maformatted id'})
+  }
+  if(error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message })
   }
 
   next(error)
