@@ -1,7 +1,11 @@
 require('dotenv').config()
+
 const express = require('express')
+
 const morgan = require('morgan')
+
 const app = express()
+
 const Contact = require('./models/contact')
 
 app.use(express.static('dist'))
@@ -9,16 +13,16 @@ app.use(express.static('dist'))
 app.use(express.json())
 
 morgan.token('body', (req) => {
-  if(req.method === "POST")
+  if(req.method === 'POST')
     return JSON.stringify(req.body)
-  return "No body to display"
+  return 'No body to display'
 })
 app.use(morgan(':method :url :status :res[content-length] :response-time ms :body'))
 
 app.get('/api/persons', (req, res, next) => {
   Contact.find({})
     .then(contacts => {
-    res.json(contacts)
+      res.json(contacts)
     })
     .catch(err => next(err))
 })
@@ -29,7 +33,7 @@ app.get('/api/persons/:id', (req, res, next) => {
       if (contact){
         res.json(contact)
       } else {
-        response.status(404).end()
+        res.status(404).end()
       }
     })
     .catch(err => next(err))
@@ -44,10 +48,10 @@ app.post('/api/persons', (req, res, next) => {
   })
 
   contact.save()
-  .then(savedContact => {
-    res.json(savedContact)
-  })
-  .catch(err => next(err))
+    .then(savedContact => {
+      res.json(savedContact)
+    })
+    .catch(err => next(err))
 })
 
 app.put('/api/persons/:id',(req, res, next) => {
@@ -58,7 +62,7 @@ app.put('/api/persons/:id',(req, res, next) => {
     number: body.number,
   }
 
-  Contact.findByIdAndUpdate(req.params.id, contact, {new: true, runValidators: true})
+  Contact.findByIdAndUpdate(req.params.id, contact, { new: true, runValidators: true })
     .then(updatedContact => {
       res.json(updatedContact)
     })
@@ -75,17 +79,17 @@ app.delete('/api/persons/:id', (req, res, next) => {
 
 app.get('/info', (req, res, next) => {
   const timeOfReq = new Date().toUTCString()
-  
+
   Contact.countDocuments({})
-  .then(count => {
-    const response = `<p>Phonebook has info for ${count} people</p><p>${timeOfReq}</p>`
-    res.send(response)
-  })
-  .catch(err => next(err))
+    .then(count => {
+      const response = `<p>Phonebook has info for ${count} people</p><p>${timeOfReq}</p>`
+      res.send(response)
+    })
+    .catch(err => next(err))
 })
 
 const unknownEndpoint = (req, res) => {
-  res.status(404).send({error: 'unknown endpoint'})
+  res.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
@@ -93,7 +97,7 @@ app.use(unknownEndpoint)
 const errorHandler = (error, req, res, next) => {
 
   if(error.name === 'CastError') {
-    return res.status(400).send({error: 'maformatted id'})
+    return res.status(400).send({ error: 'maformatted id' })
   }
   if(error.name === 'ValidationError') {
     return res.status(400).json({ error: error.message })
@@ -105,6 +109,6 @@ const errorHandler = (error, req, res, next) => {
 app.use(errorHandler)
 
 const PORT = process.env.PORT
-app.listen(PORT, ()=>{
-    console.log(`Server running on port ${PORT}`)
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
